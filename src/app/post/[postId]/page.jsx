@@ -7,17 +7,17 @@ import NotFound from "../not-found";
 //   title: "Posts",
 // };
 
-// async function generateMetadata() {
-//   // load the post
-//   const { rows: posts } =
-//     await db.query(`SELECT title FROM posts WHERE posts.id = $1`, [postId]);
-//   const post = posts[0]; // get the first one
-//   console.log(post);
-//   return {
-//     title: post.title,
-//   };
-// }
-// generateMetadata()
+export async function generateMetadata({params}) {
+  // load the post
+  const { rows: posts } =
+    await db.query(`SELECT title FROM posts WHERE posts.id = $1`, [params.postId]);
+  const post = posts[0]; // get the first one
+  console.log(post);
+  return {
+    title: post.title,
+  };
+}
+
 export default async function SinglePostPage({ params }) {
   const postId = params.postId;
   
