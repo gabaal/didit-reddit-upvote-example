@@ -3,10 +3,25 @@ import { CommentList } from "@/components/CommentList";
 import { Vote } from "@/components/Vote";
 import { db } from "@/db";
 import NotFound from "../not-found";
+export const metadata = {
+  title: "Posts",
+};
 
 export default async function SinglePostPage({ params }) {
   const postId = params.postId;
+  
+  async function generateMetadata() {
+    // load the post
+    const { rows: posts } =
+      await db.query(`SELECT title FROM posts WHERE posts.id = $1`, [postId]);
+    const post = posts[0]; // get the first one
+    console.log(post);
+    return {
+      title: post.title,
+    };
+  }
 
+  await generateMetadata();
   const { rows: posts } = await db.query(
     `SELECT posts.id, posts.title, posts.body, posts.created_at, users.name, 
     COALESCE(SUM(votes.vote), 0) AS vote_total
@@ -23,8 +38,10 @@ export default async function SinglePostPage({ params }) {
    // if there is no post, run the notFound function to show the not-found.jsx page.
    if (!post) {
     NotFound();
+    // return;
   }
   
+ // Ensure generateMetadata is awaited
   const { rows: votes } = await db.query(
     `SELECT *, users.name from votes
      JOIN users on votes.user_id = users.id`
