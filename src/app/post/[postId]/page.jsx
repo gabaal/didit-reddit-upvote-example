@@ -2,6 +2,7 @@ import { CommentForm } from "@/components/CommentForm";
 import { CommentList } from "@/components/CommentList";
 import { Vote } from "@/components/Vote";
 import { db } from "@/db";
+import NotFound from "../not-found";
 
 export default async function SinglePostPage({ params }) {
   const postId = params.postId;
@@ -19,6 +20,11 @@ export default async function SinglePostPage({ params }) {
   );
   const post = posts[0];
 
+   // if there is no post, run the notFound function to show the not-found.jsx page.
+   if (!post) {
+    NotFound();
+  }
+  
   const { rows: votes } = await db.query(
     `SELECT *, users.name from votes
      JOIN users on votes.user_id = users.id`
