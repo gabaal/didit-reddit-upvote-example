@@ -3,25 +3,36 @@ import { CommentList } from "@/components/CommentList";
 import { Vote } from "@/components/Vote";
 import { db } from "@/db";
 import NotFound from "../not-found";
-export const metadata = {
-  title: "Posts",
-};
+// export const metadata = {
+//   title: "Posts",
+// };
 
+// async function generateMetadata() {
+//   // load the post
+//   const { rows: posts } =
+//     await db.query(`SELECT title FROM posts WHERE posts.id = $1`, [postId]);
+//   const post = posts[0]; // get the first one
+//   console.log(post);
+//   return {
+//     title: post.title,
+//   };
+// }
+// generateMetadata()
 export default async function SinglePostPage({ params }) {
   const postId = params.postId;
   
-  async function generateMetadata() {
-    // load the post
-    const { rows: posts } =
-      await db.query(`SELECT title FROM posts WHERE posts.id = $1`, [postId]);
-    const post = posts[0]; // get the first one
-    console.log(post);
-    return {
-      title: post.title,
-    };
-  }
+  // async function generateMetadata() {
+  //   // load the post
+  //   const { rows: posts } =
+  //     await db.query(`SELECT title FROM posts WHERE posts.id = $1`, [postId]);
+  //   const post = posts[0]; // get the first one
+  //   console.log(post);
+  //   return {
+  //     title: post.title,
+  //   };
+  // }
 
-  await generateMetadata();
+  // await generateMetadata();
   const { rows: posts } = await db.query(
     `SELECT posts.id, posts.title, posts.body, posts.created_at, users.name, 
     COALESCE(SUM(votes.vote), 0) AS vote_total
